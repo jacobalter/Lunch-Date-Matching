@@ -1,11 +1,11 @@
 from django.http import HttpResponse
+from django.shortcuts import render_to_response
+from django.template import loader
 import datetime
 from .models import Person
 
 def index(request):
-    now = datetime.datetime.now()
-    html = "<html><body>It is now %s.</body></html>" % now
-    return HttpResponse(html)
+    return render_to_response('index.html')
 
 def login(request):
 	return HttpResponse("Login Page")
