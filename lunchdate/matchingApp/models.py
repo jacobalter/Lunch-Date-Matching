@@ -10,10 +10,11 @@ from __future__ import unicode_literals
 from django.db import models
 
 class BusyAt(models.Model):
-    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid', unique=True)
-    location = models.TextField()  # This field type is a guess.
-    weekday = models.TextField()  # This field type is a guess.
+    weekday = models.IntegerField()
     timeblock = models.DateTimeField()
+    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid', unique=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     class Meta:
         db_table = 'busy_at'
@@ -37,13 +38,14 @@ class Likes(models.Model):
 
 
 class OpenAt(models.Model):
-    restaurantid = models.ForeignKey('Restaurant', models.DO_NOTHING, db_column='restaurantid', unique=True)
-    weekday = models.TextField()  # This field type is a guess.
-    timeblock = models.DateTimeField()
+    restaurantid = models.ForeignKey('Restaurant', models.DO_NOTHING, db_column='restaurantid')
+    weekday = models.IntegerField(blank=True, null=True)
+    open_time = models.IntegerField(blank=True, null=True)
+    close_time = models.IntegerField(blank=True, null=True)
 
     class Meta:
         db_table = 'open_at'
-        unique_together = (('restaurantid', 'weekday', 'timeblock'),)
+        unique_together = (('restaurantid', 'weekday', 'open_time', 'close_time'),)
 
 
 class Person(models.Model):
@@ -57,17 +59,18 @@ class Person(models.Model):
 
 
 class Restaurant(models.Model):
-    id = models.IntegerField(primary_key=True)
+    restaurantid = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=50)
-    location = models.TextField()  # This field type is a guess.
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     class Meta:
         db_table = 'restaurant'
 
 
 class SoldBy(models.Model):
-    restaurantid = models.ForeignKey(Restaurant, models.DO_NOTHING, db_column='restaurantid', unique=True)
     food_type = models.CharField(max_length=30)
+    restaurantid = models.ForeignKey(Restaurant, models.DO_NOTHING, db_column='restaurantid')
 
     class Meta:
         db_table = 'sold_by'
