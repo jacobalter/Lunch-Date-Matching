@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Django Templates Tutorial</title>
+</head>
+
+<body>
+    <div style="width:50%;margin:0 auto; font-size:150%">
+        <h1>User Information</h1>
+        <table>
+            <tr>
+                <th>Name</th>
+                <td>{{ sp.name }}</td>
+            </tr>
+            <tr>
+                <th>ID #</th>
+                <td>{{ sp.id }}</td>
+            </tr>
+            <tr>
+                <th>Meal Plan?</th>
+                <td>{{ sp.has_meal_plan }}</td>
+            </tr>
+            <tr>
+                <th>Do you want to be connected with strangers?</th>
+                <td>{{ sp.allow_strangers }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+
+</html>

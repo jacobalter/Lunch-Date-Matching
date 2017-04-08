@@ -1,11 +1,27 @@
-<script>
-	function process()
-	{
-		var url="http://127.0.0.1:8000/" + document.getElementById("url").value;
-		location.href=url;
-		return false;
-	}
-</script>
-<form onSubmit="return process();">
-	User ID: <input type="text" name="url" id="url"> <input type="submit" value="go">
-</form>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <h1>
+			Lunch Date Matching</h1>
+    <p>
+        Find a lunch buddy! Just enter your id.</p>
+    <script>
+    function process() {
+        var url = "http://127.0.0.1:8000/" + document.getElementById("url").value;
+        location.href = url;
+        return false;
+    }
+    </script>
+    <form onsubmit="return process();">
+        User ID:
+        <input id="url" name="url" type="text" />
+        <input type="submit" value="go" />&nbsp;</form>
+    <p>
+        &nbsp;</p>
+</body>
+
+</html>
