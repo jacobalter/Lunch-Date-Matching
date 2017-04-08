@@ -1,22 +1,25 @@
 from django.http import HttpResponse
 from django.shortcuts import render_to_response
 from django.template import loader
-import datetime
+import django_tables2 as tables
 from .models import Person
 from .models import Restaurant
+from django.shortcuts import render
 
 def index(request):
     return render_to_response('index.html')
 
 
 def queryOut(request, person_id):
-    sp = Person.objects.get(pk=person_id)
-    restaurant_output = Restaurant.objects.all().values()
     template = loader.get_template('queryOut.html')
+    sp = Person.objects.get(pk=person_id)
+    people = Person.objects.all()
     context = {
-        'restaurant_output': restaurant_output,
         'sp':sp,
+        'people': Person.objects.all(),
+        
     }
+
     return HttpResponse(template.render(context, request), sp)
         
     
