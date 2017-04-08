@@ -10,8 +10,8 @@
 
 <body>
     <div style="width:50%;margin:0 auto; font-size:150%">
-        <h1>User Information</h1>
-        <table>
+        <h1 align="center">User Information</h1>
+        <table align = "center">
             <tr>
                 <th>Name</th>
                 <td>{{ sp.name }}</td>
@@ -30,7 +30,17 @@
             </tr>
         </table>
     </div>
-    {% render_table people %}
+     
+    <table align = "center">
+        <tr>
+            <th><h2>Restaurant Info</h2></th>
+            <th><h2>User Information</h2></th>
+        </tr>
+        <tr>
+            <td>{% render_table restaurant %}</td>
+            <td>{% render_table people %}</td>
+        </tr>
+    </table>
 </body>
 
 </html>

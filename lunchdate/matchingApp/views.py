@@ -13,9 +13,11 @@ def index(request):
 def queryOut(request, person_id):
     template = loader.get_template('queryOut.html')
     sp = Person.objects.get(pk=person_id)
+    restaurant = Restaurant.objects.all()
     people = Person.objects.all()
     context = {
         'sp':sp,
+        'restaurant': Restaurant.objects.all(),
         'people': Person.objects.all(),
         
     }
