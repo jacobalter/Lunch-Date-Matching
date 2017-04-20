@@ -24,7 +24,19 @@ def queryOut(request, person_id):
 
     return HttpResponse(template.render(context, request), sp)
         
-# def matchUser(request, person_id):
+def matchUser(request, person_id):
+    template = loader.get_template('matchUser.html')
+    sp = Person.objects.get(pk=person_id)
+    restaurant = Restaurant.objects.all()
+    people = Person.objects.all()
+    context = {
+        'sp':sp,
+        'restaurant': Restaurant.objects.all(),
+        'people': Person.objects.all(),
+        
+    }
+
+    return HttpResponse(template.render(context, request), sp)
 # def changeSettings(request, person_id):
 # def findRestaurant(request):
 
