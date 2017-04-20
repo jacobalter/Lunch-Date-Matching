@@ -6,7 +6,7 @@
 
 <body>
     <h1>
-			Lunch Date Matching</h1>
+            Lunch Date Matching</h1>
     <p>
         Find a lunch buddy! Just enter your id.</p>
     <script>
@@ -22,6 +22,19 @@
         <input type="submit" value="go" />&nbsp;</form>
     <p>
         &nbsp;</p>
+    <h2>
+            New User Registration</h2>
+    <script>
+    function processRegister() {
+        var url = "http://127.0.0.1:8000/" + document.getElementById("url").value;
+        location.href = url;
+        return false;
+    }
+    </script>
+    <form onsubmit="return processRegister();">
+        Name, meal plan? (yes, no), connect with strangers? (yes, no):
+        <input id="url" name="url" type="text" />
+        <input type="submit" value="Register" />&nbsp;</form>
 </body>
 
 </html>
