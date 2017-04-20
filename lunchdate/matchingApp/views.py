@@ -29,7 +29,7 @@ def queryOut(request, person_id):
 # def findRestaurant(request):
 
 def registerUser(request):
-    return render_to_response('index.html')
+    
     template = loader.get_template('queryOut.html')
     sp = Person.objects.get(pk=person_id)
     restaurant = Restaurant.objects.all()
@@ -40,3 +40,4 @@ def registerUser(request):
         'people': Person.objects.all(),
         
     }
+    return HttpResponse(template.render(context, request), sp)

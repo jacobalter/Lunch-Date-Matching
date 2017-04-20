@@ -26,15 +26,17 @@
             New User Registration</h2>
     <script>
     function processRegister() {
-        var url = "http://127.0.0.1:8000/" + document.getElementById("url").value;
+        var url = "http://127.0.0.1:8000/" + document.getElementById("regInfo").value;
         location.href = url;
         return false;
     }
     </script>
     <form onsubmit="return processRegister();">
         Name, meal plan? (yes, no), connect with strangers? (yes, no):
-        <input id="url" name="url" type="text" />
+        <input id="regInfo" name="regInfo" type="text" />
         <input type="submit" value="Register" />&nbsp;</form>
+        <p>
+        &nbsp;</p>
 </body>
 
 </html>
