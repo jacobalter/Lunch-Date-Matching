@@ -11,8 +11,8 @@ from django.db import models
 
 class BusyAt(models.Model):
     weekday = models.IntegerField()
-    timeblock = models.DateTimeField()
-    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid', unique=True)
+    timeblock = models.TimeField()
+    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid')
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
 
@@ -21,8 +21,8 @@ class BusyAt(models.Model):
         unique_together = (('userid', 'weekday', 'timeblock'),)
 
 class Friends(models.Model):
-    user1 = models.ForeignKey('Person', models.DO_NOTHING, unique=True, related_name = "user1")
-    user2 = models.ForeignKey('Person', models.DO_NOTHING, unique=True, related_name= "user2")
+    user1 = models.ForeignKey('Person', models.DO_NOTHING, related_name = "user1")
+    user2 = models.ForeignKey('Person', models.DO_NOTHING, related_name= "user2")
 
     class Meta:
         db_table = 'friends'
@@ -30,7 +30,8 @@ class Friends(models.Model):
 
 
 class Likes(models.Model):
-    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid', primary_key=True)
+    id = models.IntegerField(primary_key=True)
+    userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid')
     food_type = models.CharField(max_length=30)
 
     class Meta:
@@ -66,6 +67,14 @@ class Restaurant(models.Model):
 
     class Meta:
         db_table = 'restaurant'
+
+class Buildings(models.Model):
+    name = models.CharField(max_length=50)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
+
+    class Meta:
+        db_table = 'buildings'
 
 
 class SoldBy(models.Model):
