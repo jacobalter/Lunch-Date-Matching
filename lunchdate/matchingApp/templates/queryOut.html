@@ -4,14 +4,54 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Django Templates Tutorial</title>
+    <title>queryOut</title>
     <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
 </head>
 
 <body>
-    <div style="width:50%;margin:0 auto; font-size:150%">
+    <div style="width:50%;margin: auto; font-size:150%">
+        <table align="center">
+            <tr>
+                <th style="padding:0 15px 0 15px;"><a href="http://www.yahoo.com">Add Friends</a></th>
+                <th style="padding:0 15px 0 15px;"><a href="http://www.yahoo.com">Modify User Settings</a></th>
+                <th style="padding:0 15px 0 15px;"><a href="http://www.yahoo.com">Find a Restaurant</a></th>
+            </tr>
+        </table>
+    </div>
+    <div style="width:50%;margin: auto; font-size:100%">
+        <h1 align="center">Match with another User</h1>
+        <table align="center">
+            <tr>
+                <th>
+                    <p>
+                        Meet at a specific time:</p>
+                    <script>
+                    function process() {
+                        var url = "http://127.0.0.1:8000/" + document.getElementById("url").value + "match";
+                        location.href = url;
+                        return false;
+                    }
+                    </script>
+                    <form onsubmit="return process();">
+                        Day, Time, Distance:
+                        <input id="url" name="url" type="text" />
+                        <input type="submit" value="go" />&nbsp;</form>
+                    <p>
+                        &nbsp;</p>
+                </th>
+                <th>or</th>
+
+
+                <th style="padding:0 15px 0 15px;"><a href="http://www.yahoo.com/">Meet Someone Now!</a></th>
+
+            </tr>
+
+            
+        </table>
+    </div>
+    <div style="width:50%;margin:0 auto; font-size:100%">
         <h1 align="center">User Information</h1>
-        <table align = "center">
+        <table align="center">
             <tr>
                 <th>Name</th>
                 <td>{{ sp.name }}</td>
@@ -30,11 +70,12 @@
             </tr>
         </table>
     </div>
-     
-    <table align = "center">
+    <table align="center">
         <tr>
-            <th><h2>Restaurant Info</h2></th>
-            <th><h2>User Information</h2></th>
+            <th>
+                <h2>Restaurant Info</h2></th>
+            <th>
+                <h2>User Information</h2></th>
         </tr>
         <tr>
             <td>{% render_table restaurant %}</td>
