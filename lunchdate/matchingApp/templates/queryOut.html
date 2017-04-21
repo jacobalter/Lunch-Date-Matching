@@ -23,31 +23,49 @@
         <table align="center">
             <tr>
                 <th>
-                    <p>
-                        Meet at a specific time:</p>
+                        Meet at a specific time: </th>
+						<td>
+				<form>
+				<select id="hours">
+				{% for h in hours %}
+					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
+				{% endfor %}
+				</select>
+			</form></td>
+			<td>
+			<form method="POST" initial = 5>
+				<select id="minutes">
+				{% for m in minutes %}
+					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
+				{% endfor %}
+				</select>
+			</form></td>
+			<td>
+			<form method="POST" initial = 5>
+				<select id="weekday">
+				{% for d in daysL %}
+					<option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
+				{% endfor %}
+				</select>
+			</form></td>
                     <script>
                     function process() {
-                        var url = "http://127.0.0.1:8000/" + document.getElementById("url").value + "match";
+                        var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "matchnow/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
                         location.href = url;
                         return false;
                     }
                     </script>
-                    <form onsubmit="return process();">
-                        Day, Time, Distance:
-                        <input id="url" name="url" type="text" />
-                        <input type="submit" value="go" />&nbsp;</form>
-                    <p>
-                        &nbsp;</p>
                 </th>
-                <th>or</th>
-
-
-                <th style="padding:0 15px 0 15px;"><li><a href="/{{ sp.id }}/matchnow">{{ "Match User Now" }}</a></li></th>
 
             </tr>
-
-            
         </table>
+		<center>		
+			<form onsubmit="return process();">
+			Distance (miles)
+				<input id="distance" name="distance" type="text" />
+				<input type="submit" value="go" />&nbsp;</form>
+			</form> </center>
+			
     </div>
     <div style="width:50%;margin:0 auto; font-size:100%">
         <h1 align="center">User Information</h1>
@@ -70,18 +88,7 @@
             </tr>
         </table>
     </div>
-    <table align="center">
-        <tr>
-            <th>
-                <h2>Restaurant Info</h2></th>
-            <th>
-                <h2>User Information</h2></th>
-        </tr>
-        <tr>
-            <td>{% render_table restaurant %}</td>
-            <td>{% render_table people %}</td>
-        </tr>
-    </table>
+
 </body>
 
 </html>

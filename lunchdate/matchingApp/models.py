@@ -1,16 +1,11 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey has `on_delete` set to the desired behavior.
-#   * Remove `managed = False` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
+
 from __future__ import unicode_literals
 
 from django.db import models
+from django.forms import ModelForm
 
 class BusyAt(models.Model):
-    weekday = models.IntegerField()
+    weekday = models.CharField(max_length = 5)
     timeblock = models.TimeField()
     userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid')
     latitude = models.FloatField(blank=True, null=True)
@@ -33,6 +28,9 @@ class Likes(models.Model):
     id = models.IntegerField(primary_key=True)
     userid = models.ForeignKey('Person', models.DO_NOTHING, db_column='userid')
     food_type = models.CharField(max_length=30)
+	
+    def __str__(self):
+        return self.food_type
 
     class Meta:
         db_table = 'likes'
@@ -54,6 +52,9 @@ class Person(models.Model):
     name = models.CharField(max_length=30)
     allow_strangers = models.BooleanField()
     has_meal_plan = models.BooleanField()
+	
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'person'
@@ -64,6 +65,9 @@ class Restaurant(models.Model):
     name = models.CharField(max_length=50)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
+	
+    def __str__(self):
+        return self.name
 
     class Meta:
         db_table = 'restaurant'
@@ -80,7 +84,12 @@ class Buildings(models.Model):
 class SoldBy(models.Model):
     food_type = models.CharField(max_length=30)
     restaurantid = models.ForeignKey(Restaurant, models.DO_NOTHING, db_column='restaurantid')
+	
+    def __str__(self):
+        return self.food_type
 
     class Meta:
         db_table = 'sold_by'
         unique_together = (('restaurantid', 'food_type'),)
+	
+
