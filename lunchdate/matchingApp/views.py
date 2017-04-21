@@ -38,10 +38,11 @@ def restaurant_sorter(self, possible_restaurants, cur_location, fr_location):
     fr_prefs = len(possible_restaurants[self][1])
     both_prefs = len(possible_restaurants[self][2])
     score = 0
-    score += (both_prefs * 3) + (fr_prefs) + (your_prefs)
+    score += (both_prefs * 2) + (fr_prefs) + (your_prefs)
     their_distance = vincenty((self.latitude, self.longitude), (fr_location.latitude, fr_location.longitude)).miles
     score -= their_distance
-    return score
+    score += 1
+    return "%.2f" % (score)
     
     
 
@@ -126,7 +127,9 @@ def getMatchRestaurant(request, fr_id, person_id, day, time, dist):
                     found_open = 1
                     break
         if distance <= int(dist) and found_open == 1:
-            valid.append(r.restaurantid)
+			#dining halls
+            if not ((r.restaurantid == 201 or r.restaurantid == 202) and (sp.has_meal_plan == False or fr.has_meal_plan == False)):
+                valid.append(r.restaurantid)
     possible_restaurants = Restaurant.objects.filter(restaurantid__in = valid)
 	
     your_preferences = Likes.objects.filter(userid = person_id)
@@ -157,7 +160,11 @@ def getMatchRestaurant(request, fr_id, person_id, day, time, dist):
 
     restaurants_list = []
     fr_location = get_location(fr, time, int(day))
-    restaurants_list = sorted(list(possible_restaurants), key = lambda elem: restaurant_sorter(elem, match_dict, cur_location, fr_location), reverse = True)
+    for r in possible_restaurants:
+        temp_score = (r.name, float(restaurant_sorter(r, match_dict, cur_location, fr_location)))
+        restaurants_list.append(temp_score)
+    restaurants_list = sorted(restaurants_list, key=lambda x: x[1], reverse = True)
+    restaurants_list = restaurants_list[:10]
 	
 	
     context = {

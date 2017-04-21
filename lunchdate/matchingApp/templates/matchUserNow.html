@@ -18,25 +18,18 @@
     {%for p in table%}
 	<tr>
 	{%for i in p%}
-	<td align = "center">{{i}}</td>
+	<td align = "center">{%if forloop.first%}<button onclick="return movePage(value)" id = "friend" value = {{i.id}}>{{i}}{%else%} {{i}}{%endif%}</button></td>
 	{% endfor %}
 	</tr>
     {% endfor %}
 </table>
 	<script>
-	function movePage() {
-		var url = "http://127.0.0.1:8000/" + document.getElementById("friend").value + "matchedrestaurant/" + "{{sp.id}}/" +  "{{day}}/" + "{{time}}/"+ "{{distance}}/";
+	function movePage(id) {
+		var url = "http://127.0.0.1:8000/" + id + "matchedrestaurant/" + "{{sp.id}}/" +  "{{day}}/" + "{{time}}/"+ "{{distance}}/";
 		location.href = url;
 		return false;
 	}
 	</script>
-	
-	<form onsubmit="return movePage();" align = "center">
-		Enter a friend id: 
-		<input id="friend" name="friend" type="text" />
-		<input type="submit" value="go" />&nbsp;</form>
-	<p>
-		&nbsp;</p>
 	
 </body>
 

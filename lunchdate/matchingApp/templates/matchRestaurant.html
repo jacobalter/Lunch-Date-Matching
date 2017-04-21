@@ -30,14 +30,22 @@
                 <td>{{ truetime }}</td>
             </tr>
     </div>
-	</table>
 	
+<table style="width:100%">
+<h1 align = "center">
+            Results</h1>
+	<tr>
+    <th>Restaurant</th>
+    <th>Score</th> 
 	</br>
-	</br>
-	<center> {%for t in restaurants%}
-			{{t}}
-			</br>
-			{%endfor%}</center>
+    {%for p in restaurants%}
+	<tr>
+	{%for i in p%}
+	<center><td>{{i}}</td></center>
+	{% endfor %}
+	</tr>
+    {% endfor %}
+</table>
 </body>
 
 </html>
