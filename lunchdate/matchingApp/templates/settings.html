@@ -7,7 +7,7 @@
 <body>
 <button onclick="return goHome()" id = "home">Home </button>
     <div style="width:50%;margin:0 auto; font-size:100%">
-        <h1 align="center">User Information</h1>
+        <h1 align="center">Current User Information</h1>
         <table align="center">
             <tr>
                 <th>Name</th>
@@ -27,6 +27,58 @@
             </tr>
         </table>
     </div>
+	
+	<h1 align="center">Change User Information</h1>
+        <table align="center">
+            <tr>
+				<td><form>
+					Updated name:
+					<input id="name" name="name" type="text" value = ""/>
+				</form> </td>
+			</tr>
+			<tr> 
+				<td><form>
+					Meal Plan?:
+					<b>Yes</b>
+					<input id="mealplanY" name="mealplan" type="radio" />
+					<b>No</b>
+					<input id="mealplanN" name="mealplan" type="radio"/></td>
+				</form> </td>
+			</tr>
+			<tr> 
+				<td><form>
+					Do you want to be connected with strangers?
+					<b>Yes</b>
+					<input id="strangersY" name="strangers" type="radio" />
+					<b>No</b>
+					<input id="strangersN" name="strangers" type="radio"/></td>
+				</form> </td>
+				<tr><td><form onSubmit = "return process()"><input type="submit" value="Submit"/></form></td></tr>
+			</tr>
+        </table>
+    </div>
+	<script>
+		function process() {
+		    if (mealplanY.checked){
+				mealplan = "T"
+			}
+			else if (mealplanN.checked){
+				mealplan = "F"
+			}
+			else mealplan = "N"
+			
+			if (strangersY.checked){
+				strangers = "T"
+			}
+			else if (strangersN.checked){
+				strangers = "F"
+			}
+			else strangers = "N"
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "update/" + document.getElementById("name").value + "/" + mealplan + "/" + strangers + "/";
+			location.href = url;
+			return false;
+		}
+		</script>
 	<script>
 		function goHome() {
 			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";

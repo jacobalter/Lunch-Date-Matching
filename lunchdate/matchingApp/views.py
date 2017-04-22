@@ -353,6 +353,7 @@ def friendEntry(request, person_id, fr_id):
         pass
 
     return HttpResponseRedirect("/%d/" % sp.id)
+	
 
 def settings(request, person_id):
     template = loader.get_template('settings.html')
@@ -391,6 +392,7 @@ def queryRestaurant(request, person_id, foodtype, dist, hour, minute, day):
     template = loader.get_template('queryRestaurant.html')
     sp = Person.objects.get(pk=person_id)
 
+    trueminute = "-1"
     time = datetime.datetime.now()
     if(hour == "-"):
         hour = time.hour
@@ -398,21 +400,25 @@ def queryRestaurant(request, person_id, foodtype, dist, hour, minute, day):
         hour = int(hour)
     if(minute == "-"):
         minute = time.minute
+        trueminute = str(datetime.datetime.now().minute)
     else:
         minute = int(minute)
 
     days = {"-": "-", "Monday":0, "Tuesday":1, "Wednesday":2, "Thursday":3, "Friday":4, "Saturday":5, "Sunday":6}
     day = days[day]
     if(day == "-"):
-        day = datetime.date.today().weekday()
+        day = int(datetime.date.today().weekday())
     truetime = (hour * 100) + minute
     if(minute >= 30):
         minute = 30
-        time_str = str(hour) + ":" + str(30)
+        if(trueminute == "-1"):
+            trueminute = "30"
     else:
         minute = 0
-        time_str = str(hour) + ":" + "00"
+        if(trueminute == "-1"):
+            trueminute = "30"
     time = (hour * 100) + minute
+    time_str = str(hour) + ":" + trueminute
 	
     if(day == 0):
         daystr = "Monday"
@@ -424,7 +430,7 @@ def queryRestaurant(request, person_id, foodtype, dist, hour, minute, day):
         daystr = "Thursday"
     elif(day == 4):
         daystr = "Friday"
-    elif(day == 6):
+    elif(day == 5):
         daystr = "Saturday"
     else:
         daystr = "Sunday"
@@ -490,5 +496,30 @@ def registerUser(request):
         
     }
     return HttpResponse(template.render(context, request), sp)
+
+def updateUser(request, person_id, newname, mealplan, strangers):
+    sp = Person.objects.get(pk=person_id)
+	
+    if(newname != ""):
+        sp.name = newname
+        sp.save() 
+		
+    if(mealplan == "T"):
+        sp.has_meal_plan = True
+        sp.save()	
+    elif(mealplan == "F"):
+        sp.has_meal_plan = False
+        sp.save()
+		
+    if(strangers == "T"):
+        sp.allow_strangers = True
+        sp.save()	
+    elif(strangers == "F"):
+        sp.allow_strangers = False
+        sp.save()		
+
+    return HttpResponseRedirect("/%d/" % sp.id)
+
+	
 	
 	
