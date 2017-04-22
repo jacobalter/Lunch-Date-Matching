@@ -5,29 +5,26 @@
 </head>
 
 <body>
-    <h1>
-            add Friends test</h1>
     </div>
     <div style="width:50%;margin:0 auto; font-size:100%">
-        <h1 align="center">User Information</h1>
+        <h1 align="center">Add a Friend</h1>
         <table align="center">
             <tr>
-                <th>Name</th>
-                <td>{{ sp.name }}</td>
-            </tr>
-            <tr>
-                <th>ID #</th>
-                <td>{{ sp.id }}</td>
-            </tr>
-            <tr>
-                <th>Meal Plan?</th>
-                <td>{{ sp.has_meal_plan }}</td>
-            </tr>
-            <tr>
-                <th>Do you want to be connected with strangers?</th>
-                <td>{{ sp.allow_strangers }}</td>
+                <td><form onSubmit="return addFriend()">
+				Friend ID: 
+				<input id="friend" type="integer" name="friend"/>
+				<input type="submit" value="Submit" />
+				</form></td>
             </tr>
         </table>
+		
+		<script>
+		function addFriend() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "addfriends/" + document.getElementById("friend").value + "/";
+			location.href = url;
+			return false;
+		}
+	</script>
     </div>
 </body>
 

@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.http import HttpResponseRedirect
 from django.shortcuts import render_to_response
 from django.template import loader
 import django_tables2 as tables
@@ -9,6 +10,8 @@ from math import *
 from geopy.distance import vincenty
 from geopy.geocoders import Nominatim
 from math import *
+from django.db import connection, transaction
+
 	
 def index(request):
     return render_to_response('index.html')
@@ -320,16 +323,36 @@ def matchUserNow(request, person_id, distance, hour, minute, day):
 def addFriends(request, person_id):
     template = loader.get_template('addFriends.html')
     sp = Person.objects.get(pk=person_id)
-    restaurant = Restaurant.objects.all()
-    people = Person.objects.all()
     context = {
         'sp':sp,
-        'restaurant': Restaurant.objects.all(),
-        'people': Person.objects.all(),
-        
     }
 
     return HttpResponse(template.render(context, request), sp)
+	
+def friendEntry(request, person_id, fr_id):
+    sp = Person.objects.get(pk=person_id)
+    fr = Person.objects.get(pk=fr_id)
+	
+    cursor = connection.cursor()
+    cursor.execute("select nextval('friends_id_seq')")
+    result = cursor.fetchone()
+	
+    if sp.id > fr.id:
+        if Friends.objects.filter(user1 = fr, user2 = sp).exists():
+            pass
+        else:
+            newFriend = Friends(id = result[0], user1 = fr, user2 = sp)
+            newFriend.save()
+    elif fr.id > sp.id:
+        if Friends.objects.filter(user1 = sp, user2 = fr).exists():
+            pass
+        else:
+            newFriend = Friends(id = result[0], user1 = sp, user2 = fr)
+            newFriend.save()
+    else:
+        pass
+
+    return HttpResponseRedirect("/%d/" % sp.id)
 
 def settings(request, person_id):
     template = loader.get_template('settings.html')

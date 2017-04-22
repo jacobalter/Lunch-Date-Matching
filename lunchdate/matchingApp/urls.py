@@ -10,5 +10,5 @@ urlpatterns = [
     url(r'^(?P<person_id>[0-9]+)/settings/$', views.settings, name='Settings'),
     url(r'^(?P<person_id>[0-9]+)/findrestaurant/$', views.findRestaurant, name='FindRestaurant'),
 	url(r'^(?P<fr_id>[0-9]+)matchedrestaurant/(?P<person_id>[0-9]+)/(?P<day>[0-9]+)/(?P<time>[0-9]+)/(?P<dist>[0-9]+)/$', views.getMatchRestaurant, name='MatchRestaurant'),
-
+	url(r'^(?P<person_id>[0-9]+)/addfriends/(?P<fr_id>[0-9]+)/$', views.friendEntry, name='FriendEntry'),
 ]

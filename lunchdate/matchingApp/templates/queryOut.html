@@ -33,7 +33,7 @@
 				</select>
 			</form></td>
 			<td>
-			<form method="POST" initial = 5>
+			<form>
 				<select id="minutes">
 				{% for m in minutes %}
 					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
@@ -41,7 +41,7 @@
 				</select>
 			</form></td>
 			<td>
-			<form method="POST" initial = 5>
+			<form>
 				<select id="weekday">
 				{% for d in daysL %}
 					<option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
