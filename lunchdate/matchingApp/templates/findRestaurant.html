@@ -6,27 +6,88 @@
 
 <body>
     </div>
-    <div style="width:50%;margin:0 auto; font-size:100%">
+	<button onclick="return goHome()" id = "home">Home </button>
+    <div style="width:100%;margin:0 auto; font-size:100%">
         <h1 align="center">Find a Restaurant</h1>
         <table align="center">
-            <tr>
-                <th>Name</th>
-                <td>{{ sp.name }}</td>
-            </tr>
-            <tr>
-                <th>ID #</th>
-                <td>{{ sp.id }}</td>
-            </tr>
-            <tr>
-                <th>Meal Plan?</th>
-                <td>{{ sp.has_meal_plan }}</td>
-            </tr>
-            <tr>
-                <th>Do you want to be connected with strangers?</th>
-                <td>{{ sp.allow_strangers }}</td>
-            </tr>
+			<tr>
+				<td><form>
+				Select a food type:
+					<select id="foodtype">
+					{% for t in types %}
+						<option value="{{ t }}">{{ t }}</option>
+					{% endfor %}
+					</select>
+				</form></td>
+			</tr>
+			<tr>
+				<td><form>
+				Choose a maximum distance (miles):
+				<input id="distance" name="distance" type="text" required/>
+			</form> </td>
+			</tr>
+			<tr>
+				<td><form>
+				Open now
+				<input id="openow" name="opennow" type="radio" onClick = "disabletimes()" checked = "checked"/></td>
+				<td>Open at a specific time
+				<input id="opennow" name="opennow" type="radio" onClick = "enabletimes()"/></td>
+			</form> </td>
+			</tr>
+			<tr><td> </td><td><form onSubmit = "return process()">
+				<select id="hours" disabled="disabled">
+				{% for h in hours %}
+					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
+				{% endfor %}
+				</select>
+				<select id="minutes" disabled="disabled">
+				{% for m in minutes %}
+					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
+				{% endfor %}
+				</select>
+				<select id="weekday" disabled="disabled">
+				{% for d in daysL %}
+					<option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
+				{% endfor %}
+				</select></td></tr>
+				<tr><td><input type="submit" value="Find a Restaurant"/></td></tr>
+				</form>
         </table>
     </div>
+	
+	<script>
+		function process() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "queryrestaurant/" + document.getElementById("foodtype").value + "/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
+			location.href = url;
+			return false;
+		}
+		</script>
+	
+	<script>
+		function disabletimes() {
+		    document.getElementById("hours").disabled = true;
+			document.getElementById("hours").value = "-";
+			document.getElementById("minutes").disabled = true;
+			document.getElementById("minutes").value = "-";
+			document.getElementById("weekday").disabled = true;
+			document.getElementById("weekday").value = "-";
+		}
+		</script>
+		
+		<script>
+			function enabletimes() {
+				document.getElementById("hours").disabled = false;
+				document.getElementById("minutes").disabled = false;
+				document.getElementById("weekday").disabled = false;
+			}
+		</script>
+		<script>
+		function goHome() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+			location.href = url;
+			return false;
+		}
+	</script>
 </body>
 
 </html>

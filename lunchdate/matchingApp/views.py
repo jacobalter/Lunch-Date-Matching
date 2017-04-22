@@ -206,7 +206,7 @@ def matchUserNow(request, person_id, distance, hour, minute, day):
         time_str = str(hour) + ":" + str(30)
     else:
         minute = 0
-        time_str = str(hour) + ":" + str(00)
+        time_str = str(hour) + ":" + "00"
     time = (hour * 100) + minute
 	
     #find person's location
@@ -370,14 +370,111 @@ def settings(request, person_id):
 def findRestaurant(request, person_id):
     template = loader.get_template('findRestaurant.html')
     sp = Person.objects.get(pk=person_id)
-    restaurant = Restaurant.objects.all()
+    types = SoldBy.objects.all().distinct('food_type')
+    hours = []
+    hours.append("-")
+    for i in range (0, 24):
+        hours.append(i)
+    minutes = ["-", 0, 30]
+    days = ["-", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     context = {
         'sp':sp,
-        'restaurant': Restaurant.objects.all(),
-        
+        'types': types,
+		'hours' : hours,
+		'minutes': minutes,
+		'daysL' : days
     }
 
     return HttpResponse(template.render(context, request), sp)
+	
+def queryRestaurant(request, person_id, foodtype, dist, hour, minute, day):
+    template = loader.get_template('queryRestaurant.html')
+    sp = Person.objects.get(pk=person_id)
+
+    time = datetime.datetime.now()
+    if(hour == "-"):
+        hour = time.hour
+    else:
+        hour = int(hour)
+    if(minute == "-"):
+        minute = time.minute
+    else:
+        minute = int(minute)
+
+    days = {"-": "-", "Monday":0, "Tuesday":1, "Wednesday":2, "Thursday":3, "Friday":4, "Saturday":5, "Sunday":6}
+    day = days[day]
+    if(day == "-"):
+        day = datetime.date.today().weekday()
+    truetime = (hour * 100) + minute
+    if(minute >= 30):
+        minute = 30
+        time_str = str(hour) + ":" + str(30)
+    else:
+        minute = 0
+        time_str = str(hour) + ":" + "00"
+    time = (hour * 100) + minute
+	
+    if(day == 0):
+        daystr = "Monday"
+    elif(day == 1):
+        daystr = "Tuesday"
+    elif(day == 2):
+        daystr = "Wednesday"
+    elif(day == 3):
+        daystr = "Thursday"
+    elif(day == 4):
+        daystr = "Friday"
+    elif(day == 6):
+        daystr = "Saturday"
+    else:
+        daystr = "Sunday"
+	
+    #find person's location
+    cur_location = get_location(sp, time, day)
+    all_restaurants = Restaurant.objects.all()
+    valid = []
+    for r in all_restaurants:
+        distance = vincenty((r.latitude, r.longitude), (cur_location.latitude, cur_location.longitude)).miles
+        times = OpenAt.objects.filter(restaurantid = r.restaurantid, weekday = int(day))
+        found_open = 0
+        for t in times:
+            open = t.open_time
+            close = t.close_time
+            if(close < open):
+                close = 2400
+            if open <= time and time <= close:
+                found_open = 1
+                break	
+		#check open day before
+        times = OpenAt.objects.filter(restaurantid = r.restaurantid, weekday = (int(day) - 1) % 7)
+        for t in times:
+            open = t.open_time
+            close = t.close_time
+            if(close < open):
+                if(0 <= time and time <= close):
+                    found_open = 1
+                    break
+        if distance <= int(dist) and found_open == 1:
+			#dining halls
+            if not ((r.restaurantid == 201 or r.restaurantid == 202) and (sp.has_meal_plan == False)):
+                sells = SoldBy.objects.filter(restaurantid = r.restaurantid)
+                sells_list = []
+                for s in sells:
+                    sells_list.append(s.food_type)
+                if foodtype in sells_list:
+                    valid.append(r.restaurantid)
+    possible_restaurants = Restaurant.objects.filter(restaurantid__in = valid)
+	
+    context = {
+        'sp':sp,
+        'time' : time_str,
+        'day' : daystr,
+		'type' : foodtype,
+		'restaurants' : possible_restaurants,
+		'dist' : dist
+    }
+    return HttpResponse(template.render(context, request), sp)
+	
 
 
 def registerUser(request):

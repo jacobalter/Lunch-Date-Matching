@@ -7,6 +7,7 @@
 </head>
 
 <body>
+   <button onclick="return goHome()" id = "home">Home </button>
     <h1 align = "center">
             Possible Lunch Dates</h1>
 	<table style="width:100%">
@@ -29,6 +30,14 @@
 		location.href = url;
 		return false;
 	}
+	</script>
+	
+	<script>
+		function goHome() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+			location.href = url;
+			return false;
+		}
 	</script>
 	
 </body>

@@ -5,9 +5,7 @@
 </head>
 
 <body>
-    <h1>
-            User settings test</h1>
-    </div>
+<button onclick="return goHome()" id = "home">Home </button>
     <div style="width:50%;margin:0 auto; font-size:100%">
         <h1 align="center">User Information</h1>
         <table align="center">
@@ -29,6 +27,13 @@
             </tr>
         </table>
     </div>
+	<script>
+		function goHome() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+			location.href = url;
+			return false;
+		}
+	</script>
 </body>
 
 </html>
