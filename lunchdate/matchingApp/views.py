@@ -52,7 +52,6 @@ def restaurant_sorter(self, possible_restaurants, cur_location, fr_location):
 def queryOut(request, person_id):
     template = loader.get_template('queryOut.html')
     sp = Person.objects.get(pk=person_id)
-    restaurant = Restaurant.objects.all()
     people = Person.objects.all()
     
     hours = []
@@ -63,8 +62,6 @@ def queryOut(request, person_id):
     days = ["-", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     context = {
         'sp':sp,
-        'restaurant': Restaurant.objects.all(),
-        'people': Person.objects.all(),
 		'hours': hours,
 		'minutes' : minutes,
 		'daysL' : days,
@@ -88,7 +85,7 @@ def getMatchRestaurant(request, fr_id, person_id, day, time, dist):
         daystr = "Thursday"
     elif(day == 4):
         daystr = "Friday"
-    elif(day == 6):
+    elif(day == 5):
         daystr = "Saturday"
     else:
         daystr = "Sunday"
@@ -358,12 +355,8 @@ def friendEntry(request, person_id, fr_id):
 def settings(request, person_id):
     template = loader.get_template('settings.html')
     sp = Person.objects.get(pk=person_id)
-    restaurant = Restaurant.objects.all()
-    people = Person.objects.all()
     context = {
         'sp':sp,
-        'restaurant': Restaurant.objects.all(),
-        'people': Person.objects.all(),
         
     }
     return HttpResponse(template.render(context, request), sp)
@@ -519,6 +512,49 @@ def updateUser(request, person_id, newname, mealplan, strangers):
         sp.save()		
 
     return HttpResponseRedirect("/%d/" % sp.id)
+
+def addConflicts(request, person_id):
+    template = loader.get_template('addConflicts.html')
+    sp = Person.objects.get(pk=person_id)
+    hours = []
+    for i in range (0, 24):
+        hours.append(i)
+    minutes = [ 0, 30]
+    days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    allbuildings = Buildings.objects.all()
+    buildings = []
+    buildings.append("-")
+    for b in allbuildings:
+        buildings.append(b.name)
+    context = {
+        'sp':sp,
+		'hours' : hours,
+		'minutes': minutes,
+		'buildings' : buildings
+    }
+    return HttpResponse(template.render(context, request), sp)
+	
+def updateConflict(request, person_id, hour, minute, day, address, building):
+    sp = Person.objects.get(pk=person_id)
+    geolocator = Nominatim()
+    if address != "":
+            location = geolocator.geocode(address) 
+    else:
+        location = Buildings.objects.get(name = building)
+    latitude = location.latitude
+    longitude = location.longitude
+    time = str(hour) + ":" + str(minute)
+    days = {"M": "0", "T": "1", "W": "2", "R": "3", "F": "4", "S": "5", "U": "6"}
+    for d in day:
+        cursor = connection.cursor()
+        cursor.execute("select nextval('busy_at_id_seq')")
+        result = cursor.fetchone()
+        result = result[0]
+        conflict = BusyAt(id = result, weekday = days[d], userid = sp, latitude = latitude, longitude = longitude, timeblock = time)
+        conflict.save()
+    return HttpResponseRedirect("/%d/" % sp.id)
+
+
 
 	
 	

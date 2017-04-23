@@ -1,0 +1,76 @@
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+<button onclick="return goHome()" id = "home">Home </button>
+    <div style="width:50%;margin:0 auto; font-size:100%">
+        <h1 align="center">Add New Conflict</h1>
+        <table align="center">
+            <tr><td><form onSubmit = "return process()">
+			    <b>Time:</b> 
+				<select id="hours">
+				{% for h in hours %}
+					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
+				{% endfor %}
+				</select>
+				<select id="minutes" >
+				{% for m in minutes %}
+					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
+				{% endfor %}
+				</select>
+				</form>
+				<tr><form action="">
+					<tr><td> <b>Day(s): </b><input type="checkbox" name="M" id="M" value="M">Monday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="T" id="T" value="T">Tuesday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="W" id="W" value="W">Wednesday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="R" id="R" value="R">Thursday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="F" id="F" value="F">Friday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="S" id="S" value="S">Saturday<br></td></tr>
+					<tr><td>&emsp;&emsp;&emsp;<input type="checkbox" name="U" id="U" value="U">Sunday<br></td></tr>
+					</td>
+				</form></tr>
+				<tr>
+					<td><form>
+						 <b>Add address: </b> 
+						<input id="address" name="address" type="text" value = ""/>
+						<td> &emsp;&emsp;&emsp;or &emsp;&emsp;&emsp;</td>
+						<td> <b>Select academic building  </b>
+							<select id="building">
+							{% for b in buildings %}
+								<option value="{{ b }}">{{ b }}</option>
+							{% endfor %}
+							</select>
+					</form> </td>
+					<form onSubmit = "return process()"> <tr><td><input type="submit" value="Add Conflict"/></td></tr> </form>
+			</tr>
+        </table>
+    </div>
+	
+	<script>
+		function process() {
+		    day = "";
+			if(M.checked) day += "M";
+			if(T.checked) day += "T";
+			if(W.checked) day += "W";
+			if(R.checked) day += "R";
+            if(F.checked) day += "F";
+			if(S.checked) day += "S";
+			if(U.checked) day += "U";
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "updateconflict/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + day + "/" + document.getElementById("address").value + "/" + document.getElementById("building").value + "/";
+			location.href = url;
+			return false;
+		}
+		</script>
+	<script>
+		function goHome() {
+			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+			location.href = url;
+			return false;
+		}
+	</script>
+</body>
+
+</html>
