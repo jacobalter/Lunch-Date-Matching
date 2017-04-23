@@ -51,6 +51,8 @@ def restaurant_sorter(self, possible_restaurants, cur_location, fr_location):
 
 def queryOut(request, person_id):
     template = loader.get_template('queryOut.html')
+    if not Person.objects.filter(id = person_id).exists():
+        return HttpResponseRedirect("/")
     sp = Person.objects.get(pk=person_id)
     people = Person.objects.all()
     
@@ -60,11 +62,19 @@ def queryOut(request, person_id):
         hours.append(i)
     minutes = ["-", 0, 30]
     days = ["-", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    possible_friends = Friends.objects.filter(user1 = person_id) | Friends.objects.filter(user2 = person_id)
+    temp_friends = []
+    for friend in possible_friends:
+        if int(friend.user1.id) == int(person_id):
+            temp_friends.append(friend.user2)
+        else:
+            temp_friends.append(friend.user1)
     context = {
         'sp':sp,
 		'hours': hours,
 		'minutes' : minutes,
 		'daysL' : days,
+		'friends' : temp_friends,
         
     }
 
@@ -541,18 +551,37 @@ def updateConflict(request, person_id, hour, minute, day, address, building):
             location = geolocator.geocode(address) 
     else:
         location = Buildings.objects.get(name = building)
-    latitude = location.latitude
-    longitude = location.longitude
-    time = str(hour) + ":" + str(minute)
-    days = {"M": "0", "T": "1", "W": "2", "R": "3", "F": "4", "S": "5", "U": "6"}
-    for d in day:
-        cursor = connection.cursor()
-        cursor.execute("select nextval('busy_at_id_seq')")
-        result = cursor.fetchone()
-        result = result[0]
-        conflict = BusyAt(id = result, weekday = days[d], userid = sp, latitude = latitude, longitude = longitude, timeblock = time)
-        conflict.save()
+    if(location != None):
+        latitude = location.latitude
+        longitude = location.longitude
+        time = str(hour) + ":" + str(minute)
+        days = {"M": "0", "T": "1", "W": "2", "R": "3", "F": "4", "S": "5", "U": "6"}
+        for d in day:
+            cursor = connection.cursor()
+            cursor.execute("select nextval('busy_at_id_seq')")
+            result = cursor.fetchone()
+            result = result[0]
+            conflict = BusyAt(id = result, weekday = days[d], userid = sp, latitude = latitude, longitude = longitude, timeblock = time)
+            conflict.save()
     return HttpResponseRedirect("/%d/" % sp.id)
+	
+def newUser(request, name, mealplan, strangers):
+
+    cursor = connection.cursor()
+    cursor.execute("select nextval('userseq')")
+    result = cursor.fetchone()
+    result = result[0]
+    if strangers == "T":
+        strangers = True
+    else:
+        strangers = False
+    if mealplan == "T":
+        mealplan = True
+    else:
+        mealplan = False
+    newuser = Person(id = result, name = name, allow_strangers = strangers, has_meal_plan = mealplan)
+    newuser.save()	
+    return HttpResponseRedirect("/%d/" % result)
 
 
 

@@ -9,6 +9,7 @@
 </head>
 
 <body>
+<button onclick="return logout()" id = "home">Log out </button>
     <div style="width:100%;margin: auto; font-size:150%">
         <table align="center">
             <tr>
@@ -88,7 +89,27 @@
                 <td>{{ sp.allow_strangers }}</td>
             </tr>
         </table>
+		<br>
     </div>
+	 <div style="width:50%;margin:0 auto; font-size:100%">
+	<table style="width:100%" align = "center">
+	<b><th>Friends</th></b>
+	<tr>
+	</br>
+    {%for f in friends%}
+	<tr>
+	<td><center>{{f}}</center></td>
+	</tr>
+    {% endfor %}
+</table>
+</div>
+	<script>
+		function logout() {
+			var url = "http://127.0.0.1:8000/";
+			location.href = url;
+			return false;
+		}
+	</script>
 
 </body>
 

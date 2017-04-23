@@ -12,7 +12,7 @@
         <table align="center">
 			<tr>
 				<td><form>
-				Select a food type:
+				<b>Select a food type:<b>
 					<select id="foodtype">
 					{% for t in types %}
 						<option value="{{ t }}">{{ t }}</option>
@@ -21,20 +21,19 @@
 				</form></td>
 			</tr>
 			<tr>
-				<td><form>
-				Choose a maximum distance (miles):
+				<td><form onSubmit = "return process()">
+				<b>Choose a maximum distance (miles):</b>
 				<input id="distance" name="distance" type="number" min = "0" required/>
-			</form> </td>
+			</td>
 			</tr>
 			<tr>
-				<td><form>
-				Open now
+				<td>
+				<b>Open now</b>
 				<input id="openow" name="opennow" type="radio" onClick = "disabletimes()" checked = "checked"/></td>
-				<td>Open at a specific time
-				<input id="opennow" name="opennow" type="radio" onClick = "enabletimes()"/></td>
-			</form> </td>
+				<td><b>Open at a specific time</b>
+				<input id="opennow" name="opennow" type="radio" onClick = "enabletimes()"/></td>  </td>
 			</tr>
-			<tr><td> </td><td><form onSubmit = "return process()">
+			<tr><td> </td><td>
 				<select id="hours" disabled="disabled">
 				{% for h in hours %}
 					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>

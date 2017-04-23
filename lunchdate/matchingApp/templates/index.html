@@ -24,19 +24,56 @@
         &nbsp;</p>
     <h2>
             New User Registration</h2>
-    <script>
-    function processRegister() {
-        var url = "http://127.0.0.1:8000/" + document.getElementById("regInfo").value;
-        location.href = url;
-        return false;
-    }
-    </script>
-    <form onsubmit="return processRegister();">
-        Name, meal plan? (yes, no), connect with strangers? (yes, no):
-        <input id="regInfo" name="regInfo" type="text" />
-        <input type="submit" value="Register" />&nbsp;</form>
-        <p>
-        &nbsp;</p>
+    <table >
+            <tr>
+				<td><form>
+					Name:
+					<input id="name" name="name" type="text" value = ""/ required>
+				</form> </td>
+			</tr>
+			<tr> 
+				<td><form required>
+					Meal Plan?:
+					<b>Yes</b>
+					<input id="mealplanY" name="mealplan" type="radio" />
+					<b>No</b>
+					<input id="mealplanN" name="mealplan" type="radio"/></td>
+				</form> </td>
+			</tr>
+			<tr> 
+				<td><form required>
+					Do you want to be connected with strangers?
+					<b>Yes</b>
+					<input id="strangersY" name="strangers" type="radio" />
+					<b>No</b>
+					<input id="strangersN" name="strangers" type="radio"/></td>
+				</form> </td>
+				<tr><td><form onSubmit = "return newUser()"><input type="submit" value="Submit"/></form></td></tr>
+			</tr>
+        </table>
+    </div>
+	<script>
+		function newUser() {
+		    if (mealplanY.checked){
+				mealplan = "T"
+			}
+			else if (mealplanN.checked){
+				mealplan = "F"
+			}
+			else mealplan = "N"
+			
+			if (strangersY.checked){
+				strangers = "T"
+			}
+			else if (strangersN.checked){
+				strangers = "F"
+			}
+			else strangers = "N"
+			var url = "http://127.0.0.1:8000/" +  "newuser/" + document.getElementById("name").value + "/" + mealplan + "/" + strangers + "/";
+			location.href = url;
+			return false;
+		}
+		</script>
 </body>
 
 </html>

@@ -15,4 +15,5 @@ urlpatterns = [
 	url(r'^(?P<person_id>[0-9]+)/queryrestaurant/(?P<foodtype>.*)/(?P<dist>[0-9]+)/(?P<hour>[0-9]+|-)/(?P<minute>[0-9]+|-)/(?P<day>Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday|-)/$', views.queryRestaurant, name='QueryRestaurant'),
 	url(r'^(?P<person_id>[0-9]+)/update/(?P<newname>.*)/(?P<mealplan>T|F|N)/(?P<strangers>T|F|N)/$', views.updateUser, name='UpdateUser'),
 	url(r'^(?P<person_id>[0-9]+)/updateconflict/(?P<hour>[0-9]+)/(?P<minute>[0-9]+)/(?P<day>.*)/(?P<address>.*)/(?P<building>.*)/$', views.updateConflict, name='UpdateConflict'),
+	url(r'^newuser/(?P<name>.*)/(?P<mealplan>T|F|N)/(?P<strangers>T|F|N)/$', views.newUser, name='NewUser'),
 	]
