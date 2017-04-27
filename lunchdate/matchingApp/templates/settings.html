@@ -1,91 +1,139 @@
+{% load static %}
 <html>
 
 <head>
     <title></title>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/matchingApp.css' %}">
 </head>
 
 <body>
-<button onclick="return goHome()" id = "home">Home </button>
-    <div style="width:50%;margin:0 auto; font-size:100%">
-        <h1 align="center">Current User Information</h1>
-        <table align="center">
-            <tr>
-                <th>Name</th>
-                <td>{{ sp.name }}</td>
-            </tr>
-            <tr>
-                <th>ID #</th>
-                <td>{{ sp.id }}</td>
-            </tr>
-            <tr>
-                <th>Meal Plan?</th>
-                <td>{{ sp.has_meal_plan }}</td>
-            </tr>
-            <tr>
-                <th>Do you want to be connected with strangers?</th>
-                <td>{{ sp.allow_strangers }}</td>
-            </tr>
-        </table>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://127.0.0.1:8000/">Lunch Date Matching</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="/{{ sp.id }}/addfriends">{{ "Add Friends" }}</a></li>
+                    <li><a href="/{{ sp.id }}/addconflicts">{{ "Add Conflicts" }}</a></li>
+                    <li><a href="/{{ sp.id }}/settings">{{ "Modify User Settings" }}</a></li>
+                    <li><a href="/{{ sp.id }}/findrestaurant">{{ "Find a Restaurant" }}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://127.0.0.1:8000/">Logout</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
     </div>
-	
-	<h1 align="center">Change User Information</h1>
-        <table align="center">
-            <tr>
-				<td><form>
-					<b>Updated name:</b>
-					<input id="name" name="name" type="text" value = ""/>
-				</form> </td>
-			</tr>
-			<tr> 
-				<td><form>
-					<b>Meal Plan?:</b>
-					<b>Yes</b>
-					<input id="mealplanY" name="mealplan" type="radio" checked = "true"/>
-					<b>No</b>
-					<input id="mealplanN" name="mealplan" type="radio"/></td>
-				</form> </td>
-			</tr>
-			<tr> 
-				<td><form>
-					<b>Do you want to be connected with strangers?</b>
-					<b>Yes</b>
-					<input id="strangersY" name="strangers" type="radio" checked = "true" />
-					<b>No</b>
-					<input id="strangersN" name="strangers" type="radio"/></td>
-				</form> </td>
-				<tr><td><form onSubmit = "return process()"><input type="submit" value="Submit"/></form></td></tr>
-			</tr>
-        </table>
+    <div class="container">
+        <div class="jumbotron">
+            <div><a href="/{{ sp.id }}"> &#8592 Back to User Info</a></div>
+            <h2> Current User Information </h2>
+            <table align="center">
+                <tr>
+                    <th>Name</th>
+                    <td>{{ sp.name }}</td>
+                </tr>
+                <tr>
+                    <th>ID #</th>
+                    <td>{{ sp.id }}</td>
+                </tr>
+                <tr>
+                    <th>Meal Plan?</th>
+                    <td>{{ sp.has_meal_plan }}</td>
+                </tr>
+                <tr>
+                    <th>Do you want to be connected with strangers?</th>
+                    <td>{{ sp.allow_strangers }}</td>
+                </tr>
+            </table>
+        </div>
     </div>
-	<script>
-		function process() {
-		    if (mealplanY.checked){
-				mealplan = "T"
-			}
-			else if (mealplanN.checked){
-				mealplan = "F"
-			}
-			else mealplan = "N"
-			
-			if (strangersY.checked){
-				strangers = "T"
-			}
-			else if (strangersN.checked){
-				strangers = "F"
-			}
-			else strangers = "N"
-			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "update/" + document.getElementById("name").value + "/" + mealplan + "/" + strangers + "/";
-			location.href = url;
-			return false;
-		}
-		</script>
-	<script>
-		function goHome() {
-			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
-			location.href = url;
-			return false;
-		}
-	</script>
+    <div class="container">
+        <div class="jumbotron">
+            <h2> Change User Information </h2>
+            <table align="center">
+                <tr>
+                    <td>
+                        <form>
+                            <b>Updated name:</b>
+                            <input id="name" name="name" type="text" value="" />
+                        </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <form>
+                            <b>Meal Plan?:</b>
+                            <b>Yes</b>
+                            <input id="mealplanY" name="mealplan" type="radio" checked="true" />
+                            <b>No</b>
+                            <input id="mealplanN" name="mealplan" type="radio" />
+                    </td>
+                    </form>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <form>
+                            <b>Do you want to be connected with strangers?</b>
+                            <b>Yes</b>
+                            <input id="strangersY" name="strangers" type="radio" checked="true" />
+                            <b>No</b>
+                            <input id="strangersN" name="strangers" type="radio" />
+                    </td>
+                    </form>
+                    </td>
+                    <tr>
+                        <td>
+                            <form onSubmit="return process()">
+                                <input type="submit" value="Submit" />
+                            </form>
+                        </td>
+                    </tr>
+                </tr>
+            </table>
+        </div>
+        <script>
+        function process() {
+            if (mealplanY.checked) {
+                mealplan = "T"
+            } else if (mealplanN.checked) {
+                mealplan = "F"
+            } else mealplan = "N"
+
+            if (strangersY.checked) {
+                strangers = "T"
+            } else if (strangersN.checked) {
+                strangers = "F"
+            } else strangers = "N"
+            var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "update/" + document.getElementById("name").value + "/" + mealplan + "/" + strangers + "/";
+            location.href = url;
+            return false;
+        }
+        </script>
+        <script>
+        function goHome() {
+            var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+            location.href = url;
+            return false;
+        }
+        </script>
+    </div>
+    </div>
 </body>
 
 </html>
