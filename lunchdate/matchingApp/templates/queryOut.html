@@ -6,71 +6,104 @@
     <meta charset="UTF-8">
     <title>queryOut</title>
     <link rel="stylesheet" href="{% static 'django_tables2/themes/paleblue/css/screen.css' %}" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'css/matchingApp.css' %}">
 </head>
 
 <body>
-<button onclick="return logout()" id = "home">Log out </button>
-    <div style="width:100%;margin: auto; font-size:150%">
-        <table align="center">
-            <tr>
-                <th style="padding:0 0px 0 0px;"><li><a href="/{{ sp.id }}/addfriends">{{ "Add Friends" }}</a></li></th>
-				<th style="padding:0 0px 0 0px;"><li><a href="/{{ sp.id }}/addconflicts">{{ "Add Conflicts" }}</a></li></th>
-                <th style="padding:0 0px 0 0px;"><li><a href="/{{ sp.id }}/settings">{{ "Modify User Settings" }}</a></li></th>
-                <th style="padding:0 0px 0 0px;"><li><a href="/{{ sp.id }}/findrestaurant">{{ "Find a Restaurant" }}</a></li></th>
-            </tr>
-        </table>
+    <!-- Fixed navbar -->
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Lunch Date Matching</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="http://127.0.0.1:8000/">Home</a></li>
+                    <li><a href="/{{ sp.id }}/addfriends">{{ "Add Friends" }}</a></li>
+                    <li><a href="/{{ sp.id }}/addconflicts">{{ "Add Conflicts" }}</a></li>
+                    <li><a href="/{{ sp.id }}/settings">{{ "Modify User Settings" }}</a></li>
+                    <li><a href="/{{ sp.id }}/findrestaurant">{{ "Find a Restaurant" }}</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a href="http://127.0.0.1:8000/">Logout</a></li>
+                </ul>
+            </div>
+            <!--/.nav-collapse -->
+        </div>
+    </nav>
+    <div class="container">
+        <div class="jumbotron">
+            <h2> Match with Another User </h2>
+            <div style="width:50%;margin: auto; font-size:100%">
+                
+                <table align="center">
+                    <tr>
+                        <th>
+                            Meet at a specific time: </th>
+                        <td>
+                            <form>
+                                <select id="hours">
+                                    {% for h in hours %}
+                                    <option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td>
+                            <form>
+                                <select id="minutes">
+                                    {% for m in minutes %}
+                                    <option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <td>
+                            <form>
+                                <select id="weekday">
+                                    {% for d in daysL %}
+                                    <option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
+                                    {% endfor %}
+                                </select>
+                            </form>
+                        </td>
+                        <script>
+                        function process() {
+                            var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "matchnow/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
+                            location.href = url;
+                            return false;
+                        }
+                        </script>
+                        </th>
+                    </tr>
+                </table>
+                <center>
+                    <form onsubmit="return process();">
+                        Distance (miles)
+                        <input id="distance" name="distance" type="number" min="0" required/>
+                        <input type="submit" value="go" />&nbsp;</form>
+                    </form>
+                </center>
+            </div>
+        </div>
     </div>
-    <div style="width:50%;margin: auto; font-size:100%">
-        <h1 align="center">Match with another User</h1>
-        <table align="center">
-            <tr>
-                <th>
-                        Meet at a specific time: </th>
-						<td>
-				<form>
-				<select id="hours">
-				{% for h in hours %}
-					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
-				{% endfor %}
-				</select>
-			</form></td>
-			<td>
-			<form>
-				<select id="minutes">
-				{% for m in minutes %}
-					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
-				{% endfor %}
-				</select>
-			</form></td>
-			<td>
-			<form>
-				<select id="weekday">
-				{% for d in daysL %}
-					<option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
-				{% endfor %}
-				</select>
-			</form></td>
-                    <script>
-                    function process() {
-                        var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "matchnow/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
-                        location.href = url;
-                        return false;
-                    }
-                    </script>
-                </th>
 
-            </tr>
-        </table>
-		<center>		
-			<form onsubmit="return process();">
-			Distance (miles)
-				<input id="distance" name="distance" type="number" min = "0" required/>
-				<input type="submit" value="go" />&nbsp;</form>
-			</form> </center>
-			
-    </div>
-    <div style="width:50%;margin:0 auto; font-size:100%">
-        <h1 align="center">User Information</h1>
+    <div class="container">
+        <div class="jumbotron">
+        <h2> User Information </h2>
+            
+                <div style="width:50%;margin:0 auto; font-size:100%">
+        
         <table align="center">
             <tr>
                 <th>Name</th>
@@ -89,28 +122,33 @@
                 <td>{{ sp.allow_strangers }}</td>
             </tr>
         </table>
-		<br>
+        <br>
     </div>
-	 <div style="width:50%;margin:0 auto; font-size:100%">
-	<table style="width:100%" align = "center">
-	<b><th>Friends</th></b>
-	<tr>
-	</br>
-    {%for f in friends%}
-	<tr>
-	<td><center>{{f}}</center></td>
-	</tr>
-    {% endfor %}
-</table>
-</div>
-	<script>
-		function logout() {
-			var url = "http://127.0.0.1:8000/";
-			location.href = url;
-			return false;
-		}
-	</script>
-
+            
+        </div>
+    </div>
+    <div class="container">
+        <div class="jumbotron">
+        <h2> Friends </h2>
+            
+                <div style="width:50%;margin:0 auto; font-size:100%">
+        <table style="width:100%" align="center">
+            
+            <tr>
+                </br>
+                {%for f in friends%}
+                <tr>
+                    <td>
+                        <center>{{f}}</center>
+                    </td>
+                </tr>
+                {% endfor %}
+        </table>
+    </div>
+            
+        </div>
+    </div>
+    
 </body>
 
 </html>
