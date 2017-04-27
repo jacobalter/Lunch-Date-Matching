@@ -18,7 +18,9 @@ def index(request):
 	
 def get_location(person, time, day):
     person_location = list(BusyAt.objects.raw('''SELECT * FROM busy_at WHERE userid = %s order by weekday, timeblock''', [person.id]))
+    found = 0
     for i in range(0, len((person_location))):
+        found = 1;
         if int(person_location[i].weekday) < 1:
             pass
         elif int(person_location[i].weekday) == day:
@@ -30,6 +32,10 @@ def get_location(person, time, day):
         else:
             i -= 1
             break
+    #if no conflicts, put user at Sadler Center (central to campus)
+    if found == 0:
+        sadler = Restaurant.objects.get(restaurantid = 202)
+        return sadler
     return person_location[i]
    
 def distance_sorter(self, cur_location, time, day):

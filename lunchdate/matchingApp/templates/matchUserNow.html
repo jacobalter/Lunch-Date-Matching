@@ -58,15 +58,15 @@
                     <tr style="padding-left:3px; padding-right:3px;">
                         {%for i in p%}
                         <td align="left">{%if forloop.first%}
-                            <button onclick="return movePage(value)" id="friend" value={ {i.id}}>{{i}}{%else%} {{i}}{%endif%}</button>
+                            <button onclick="return movePage({{i.id}})" id="friend" value={{i.id}}>{{i}}{%else%} {{i}}{%endif%}</button>
                         </td>
                         {% endfor %}
                     </tr>
                     {% endfor %}
             </table>
             <script>
-            function movePage(id) {
-                var url = "http://127.0.0.1:8000/" + id + "matchedrestaurant/" + "{{sp.id}}/" + "{{day}}/" + "{{time}}/" + "{{distance}}/";
+            function movePage(frId) {
+                var url = "http://127.0.0.1:8000/" + frId + "matchedrestaurant/" + "{{sp.id}}/" + "{{day}}/" + "{{time}}/" + "{{distance}}/";
                 location.href = url;
                 return false;
             }
