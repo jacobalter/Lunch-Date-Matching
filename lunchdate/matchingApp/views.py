@@ -25,6 +25,7 @@ def get_location(person, time, day):
             while(int(person_location[i].weekday) == day and i < len(person_location) and ((person_location[i].timeblock.hour * 100) + person_location[i].timeblock.minute + 30) < time):
                 i += 1
             i -= 1
+            
             break
         else:
             i -= 1

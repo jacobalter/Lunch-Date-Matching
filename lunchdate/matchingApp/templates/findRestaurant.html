@@ -3,15 +3,19 @@
 
 <head>
     <title></title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Latest compiled and minified CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'css/matchingApp.css' %}">
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </head>
 
 <body>
-<!-- Fixed navbar -->
+    <!-- Fixed navbar -->
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container">
             <div class="navbar-header">
@@ -40,13 +44,13 @@
     </div>
     <div class="container">
         <div class="jumbotron">
-        <div><a href="/{{ sp.id }}"> &#8592 Back to User Info</a></div>
-        <h2> Find a Restaurant </h2>
-            
-        <table align="center">
-			<tr>
-				<td><form>
-				<b>Select a food type:<b>
+            <div><a href="/{{ sp.id }}"> &#8592 Back to User Info</a></div>
+            <h2> Find a Restaurant </h2>
+            <table align="center">
+                <tr>
+                    <td>
+                        <form>
+                            <b>Select a food type:<b>
 					<select id="foodtype">
 					{% for t in types %}
 						<option value="{{ t }}">{{ t }}</option>
@@ -57,76 +61,85 @@
 			<tr>
 				<td><form onSubmit = "return process()">
 				<b>Choose a maximum distance (miles):</b>
-				<input id="distance" name="distance" type="number" min = "0" required/>
-			</td>
-			</tr>
-			<tr>
-				<td>
-				<b>Open now</b>
-				<input id="openow" name="opennow" type="radio" onClick = "disabletimes()" checked = "checked"/></td>
-				<td><b>Open at a specific time</b>
-				<input id="opennow" name="opennow" type="radio" onClick = "enabletimes()"/></td>  </td>
-			</tr>
-			<tr><td> </td><td>
-				<select id="hours" disabled="disabled">
-				{% for h in hours %}
-					<option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
-				{% endfor %}
-				</select>
-				<select id="minutes" disabled="disabled">
-				{% for m in minutes %}
-					<option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
-				{% endfor %}
-				</select>
-				<select id="weekday" disabled="disabled">
-				{% for d in daysL %}
-					<option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
-				{% endfor %}
-				</select></td></tr>
-				<tr><td><input type="submit" value="Find a Restaurant"/></td></tr>
-				</form>
-        </table>
-    </div>
-	
-	<script>
-		function process() {
-			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "queryrestaurant/" + document.getElementById("foodtype").value + "/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
-			location.href = url;
-			return false;
-		}
-		</script>
-	
-	<script>
-		function disabletimes() {
-		    document.getElementById("hours").disabled = true;
-			document.getElementById("hours").value = "-";
-			document.getElementById("minutes").disabled = true;
-			document.getElementById("minutes").value = "-";
-			document.getElementById("weekday").disabled = true;
-			document.getElementById("weekday").value = "-";
-		}
-		</script>
-		
-		<script>
-			function enabletimes() {
-				document.getElementById("hours").disabled = false;
-				document.getElementById("minutes").disabled = false;
-				document.getElementById("weekday").disabled = false;
-			}
-		</script>
-		<script>
-		function goHome() {
-			var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
-			location.href = url;
-			return false;
-		}
-	</script>
-            
-        </div>
-    </div>
+                            <input id="distance" name="distance" type="number" min="0" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        
+                        <input id="openow" name="opennow" type="radio" onClick="disabletimes()" checked="checked" /><b>Open now</b>
 
-	
-        
+                    </td>
+
+                </tr>
+                <tr><td><small>or</small></td></tr>
+                <tr>
+                    <td>
+                        <input id="opennow" name="opennow" type="radio" onClick="enabletimes()" /><b>Open at a specific time</b>
+                    </td>
+                </tr>
+                <tr><td>
+                    <select id="hours" disabled="disabled">
+                        {% for h in hours %}
+                        <option value="{{ h }}" {% if h == "-" %}selected{% endif %}>{{ h }}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="minutes" disabled="disabled">
+                        {% for m in minutes %}
+                        <option value="{{ m }}" {% if m == "-" %}selected{% endif %}>{{ m }}</option>
+                        {% endfor %}
+                    </select>
+                    <select id="weekday" disabled="disabled">
+                        {% for d in daysL %}
+                        <option value="{{ d }}" {% if d == "-" %}selected{% endif %}>{{ d }}</option>
+                        {% endfor %}
+                    </select></td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Find a Restaurant" />
+                    </td>
+                </tr>
+                </form>
+            </table>
+        </div>
+        <script>
+        function process() {
+            var url = "http://127.0.0.1:8000/" + "{{sp.id}}/" + "queryrestaurant/" + document.getElementById("foodtype").value + "/" + document.getElementById("distance").value + "/" + document.getElementById("hours").value + "/" + document.getElementById("minutes").value + "/" + document.getElementById("weekday").value + "/";
+            location.href = url;
+            return false;
+        }
+        </script>
+        <script>
+        function disabletimes() {
+            document.getElementById("hours").disabled = true;
+            document.getElementById("hours").value = "-";
+            document.getElementById("minutes").disabled = true;
+            document.getElementById("minutes").value = "-";
+            document.getElementById("weekday").disabled = true;
+            document.getElementById("weekday").value = "-";
+        }
+        </script>
+        <script>
+        function enabletimes() {
+            document.getElementById("hours").disabled = false;
+            document.getElementById("minutes").disabled = false;
+            document.getElementById("weekday").disabled = false;
+        }
+        </script>
+        <script>
+        function goHome() {
+            var url = "http://127.0.0.1:8000/" + "{{sp.id}}/";
+            location.href = url;
+            return false;
+        }
+        </script>
+    </div>
+    </div>
 </body>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 
 </html>
